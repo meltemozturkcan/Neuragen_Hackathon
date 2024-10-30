@@ -1,9 +1,9 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Blueprint
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import bcrypt
 from datetime import datetime
-
+bp = Blueprint('users', __name__, url_prefix='/api')
 app = Flask(__name__)
 
 # Database bağlantı bilgileri
@@ -28,8 +28,15 @@ def create_response(status_code, success, data=None, message=None):
     }
     return jsonify(response), status_code
 
-
-@app.route('/api/users', methods=['POST'])
+@bp.route('/test', methods=['GET'])
+def test_api():
+    print(f"Test user created with ID: ")
+    return create_response(
+        200,
+        True,
+        message="Eksik bilgi. Username, email ve password zorunludur."
+    )
+@bp.route('/users', methods=['POST'])
 def create_user():
     try:
         data = request.get_json()
@@ -134,7 +141,7 @@ def login_user():
         return create_response(500, False, message=str(e))
 
 
-@app.route('/api/users/<int:user_id>', methods=['GET'])
+@bp.route('/users/<int:user_id>', methods=['GET'])
 def get_user(user_id):
     try:
         conn = get_db_connection()
@@ -142,11 +149,9 @@ def get_user(user_id):
 
         # Kullanıcı bilgilerini ve istatistiklerini getir
         cur.execute("""
-            SELECT u.id, u.username, u.email, u.created_at, u.is_active,
-                   us.total_tests, us.average_score, us.last_test_date
-            FROM users u
-            LEFT JOIN user_stats us ON u.id = us.user_id
-            WHERE u.id = %s
+            SELECT id, username, email, created_at, is_active
+            FROM users
+            WHERE id = %s;
         """, (user_id,))
 
         user = cur.fetchone()
@@ -154,17 +159,6 @@ def get_user(user_id):
         if not user:
             return create_response(404, False, message="Kullanıcı bulunamadı")
 
-        # Son test sonuçlarını getir
-        cur.execute("""
-            SELECT word_tested, pronunciation_score, created_at
-            FROM test_results
-            WHERE user_id = %s
-            ORDER BY created_at DESC
-            LIMIT 5
-        """, (user_id,))
-
-        recent_tests = cur.fetchall()
-        user['recent_tests'] = recent_tests
 
         cur.close()
         conn.close()
