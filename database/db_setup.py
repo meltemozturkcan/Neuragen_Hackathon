@@ -90,9 +90,9 @@ def create_tables():
 
         # Test kelimeler tablosu
         cursor.execute("""
-            CREATE TABLE IF NOT EXISTS test_words (
+            CREATE TABLE IF NOT EXISTS turkish_alphabet (
                 id SERIAL PRIMARY KEY,
-                word VARCHAR(100) NOT NULL,
+                letter VARCHAR(100) NOT NULL,
                 difficulty_level INTEGER CHECK (difficulty_level BETWEEN 1 AND 5),
                 category VARCHAR(50),
                 created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP

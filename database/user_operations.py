@@ -200,7 +200,7 @@ def get_user(user_id):
             http_response="SUCCESS"
         )
     except Exception as e:
-        return create_response(500, False, message=("ERROR: " + str(e)), http_response="ERROR_OCCURED")
+        return create_response(400, False, message=("ERROR: " + str(e)), http_response="ERROR_OCCURED")
     finally:
         if cur is not None:
             cur.close()
