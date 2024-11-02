@@ -7,8 +7,6 @@ from db_config import DB_CONFIG
 def create_database():
     try:
         # Önce postgres veritabanına bağlanıyoruz
-        print("bef connectionnnn: ", " user:", DB_CONFIG['user'], " ", DB_CONFIG['password'], 
-              " ", DB_CONFIG['host'], " ", DB_CONFIG['port'])
         connection = psycopg2.connect(user="member1",
                                   password="member1pass",
                                   host="127.0.0.1",
