@@ -7,12 +7,25 @@ from db_config import DB_CONFIG
 def create_database():
     try:
         # Önce postgres veritabanına bağlanıyoruz
-        connection = psycopg2.connect(
-            user=DB_CONFIG['user'],
-            password=DB_CONFIG['password'],
-            host=DB_CONFIG['host'],
-            port=DB_CONFIG['port']
-        )
+        print("bef connectionnnn: ", " user:", DB_CONFIG['user'], " ", DB_CONFIG['password'], 
+              " ", DB_CONFIG['host'], " ", DB_CONFIG['port'])
+        connection = psycopg2.connect(user="member1",
+                                  password="member1pass",
+                                  host="127.0.0.1",
+                                  port="5432",
+                                  database="neuragendev")
+        
+#        connection = psycopg2.connect(
+#            user=DB_CONFIG['user'],
+#            password=DB_CONFIG['password'],
+#            host=DB_CONFIG['host'],
+#            port=DB_CONFIG['port']
+#        )
+        
+        if(connection is None):
+            print("CONNECTION IS NONE")
+
+        print("CONNECTION IS OKAY")
         connection.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 
         cursor = connection.cursor()
@@ -41,7 +54,7 @@ def create_tables():
         connection = psycopg2.connect(
             dbname="neuragendev",
             user=DB_CONFIG['user'],
-            password=DB_CONFIG['1234'],
+            password=DB_CONFIG['password'],
             host=DB_CONFIG['host'],
             port=DB_CONFIG['port']
         )
@@ -51,13 +64,19 @@ def create_tables():
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS users (
                 id SERIAL PRIMARY KEY,
-                username VARCHAR(50) UNIQUE NOT NULL,
-                email VARCHAR(100) UNIQUE NOT NULL,
+                name VARCHAR(25) NOT NULL,
+                surname VARCHAR(50) NOT NULL,
+                birth_year INTEGER NOT NULL,
+                school_grade VARCHAR(25) NOT NULL,
+                email VARCHAR(120) UNIQUE NOT NULL,
                 password_hash VARCHAR(255) NOT NULL,
                 created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
                 is_active BOOLEAN DEFAULT TRUE
             )
-        """)
+
+            
+         """)
 
         # Test sonuçları tablosu
         cursor.execute("""
@@ -107,5 +126,7 @@ def create_tables():
 
 
 if __name__ == "__main__":
+    print("BEFORE CREATE DB")
     create_database()
+    print("after create db")
     create_tables()
