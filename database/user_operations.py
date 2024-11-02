@@ -3,177 +3,212 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 import bcrypt
 from datetime import datetime
+from .db_config import get_db_connection
+
+
 bp = Blueprint('users', __name__, url_prefix='/api')
 app = Flask(__name__)
 
 # Database bağlantı bilgileri
 DB_CONFIG = {
     'dbname': 'neuragendev',
-    'user': 'postgres',
-    'password': '1234',
+    'user': 'member1',
+    'password': 'member1pass',
     'host': 'localhost',
     'port': '5432'
 }
+def getConn():
+    conn = get_db_connection()
+    return conn
 
-
-def get_db_connection():
-    return psycopg2.connect(**DB_CONFIG)
-
-
-def create_response(status_code, success, data=None, message=None):
+def create_response(status_code, success, data=None, message=None, http_response=None):
     response = {
         'success': success,
         'data': data if data else {},
-        'message': message
+        'message': message if message else {},
+        'statusCode': status_code,
+        'http_response' : http_response
     }
     return jsonify(response), status_code
 
 @bp.route('/test', methods=['GET'])
 def test_api():
-    print(f"Test user created with ID: ")
+    print(f"Test request successfully processed. :)")
     return create_response(
-        200,
-        True,
-        message="Eksik bilgi. Username, email ve password zorunludur."
+        status_code=200,
+        success=True,
+        message="Test isteği başarıyla alındı. :)",
+        http_response="TEST_REQUEST_PROCESSED"
     )
-@bp.route('/users', methods=['POST'])
+
+
+@bp.route('/signup', methods=['POST'])
 def create_user():
     try:
+        conn = getConn()
+        cur = conn.cursor(cursor_factory=RealDictCursor)
+        conn.autocommit = False
+
         data = request.get_json()
-        required_fields = ['username', 'email', 'password']
+        required_fields = ['name', 'surname', 'birthYear', "schoolGrade", "email", "password", "confirmPassword"]
 
         # Zorunlu alanları kontrol et
         if not all(field in data for field in required_fields):
             return create_response(
-                400,
-                False,
-                message="Eksik bilgi. Username, email ve password zorunludur."
+                status_code=400,
+                success=False,
+                message= "Eksik Bilgi. Bu alanların girilmesi zorunludur: name, surname, birthYear, schoolGrade, email, şifre, tekrar şifre",
+                http_response="INCOMPLETE_INFORMATION"
             )
-
+        
+        if data['password'] != data['confirmPassword']:
+            return create_response(
+                status_code=400,
+                success=False,
+                message="Şifreler uyuşmuyor. Tekrar deneyiniz lütfen.",
+                http_response="PASSWORD_NOT_MATCHED_WITH_CONFIRMED_PASSWORD"
+            )
+        
         # Şifreyi hashle
         password_hash = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt())
 
-        conn = get_db_connection()
-        cur = conn.cursor(cursor_factory=RealDictCursor)
-
         # Kullanıcıyı oluştur
         cur.execute("""
-            INSERT INTO users (username, email, password_hash)
-            VALUES (%s, %s, %s)
-            RETURNING id, username, email, created_at, is_active
-        """, (data['username'], data['email'], password_hash.decode('utf-8')))
+            INSERT INTO users (name, surname, birth_year, school_grade, email, password_hash)
+            VALUES (%s, %s, %s, %s, %s, %s)
+            RETURNING id, name, surname, birth_year, school_grade, email, created_at, updated_at, is_active
+        """, 
+        (data['name'], data['surname'], data['birthYear'], data['schoolGrade'], data['email'], password_hash.decode('utf-8'),)
+        )
 
         new_user = cur.fetchone()
-
-        # Kullanıcı istatistikleri tablosunu oluştur
-        cur.execute("""
-            INSERT INTO user_stats (user_id)
-            VALUES (%s)
-        """, (new_user['id'],))
-
         conn.commit()
-        cur.close()
-        conn.close()
 
         return create_response(
-            201,
-            True,
-            data={'user': new_user},
-            message="Kullanıcı başarıyla oluşturuldu"
-        )
-
+            status_code=201, 
+            success=True, 
+            data=new_user,
+            message="Kaydınız başarıyla oluşturuldu.", 
+            http_response="USER_CREATED")
     except psycopg2.IntegrityError as e:
+        conn.rollback()  # UNIQUE constraint ihlali durumunda rollback yapılıyor  
         return create_response(
-            409,
-            False,
-            message="Bu email veya kullanıcı adı zaten kullanımda"
-        )
+            status_code=409, 
+            success=False,
+            message="Bu email adresiyle önceden kayıt yapılmış.",
+            http_response="EMAIL_CONFLICT")
     except Exception as e:
-        return create_response(500, False, message=str(e))
+        conn.rollback()
+        return create_response(400, False, message=("ERROR: " + str(e)), http_response="BAD_REQUEST")
+    finally:
+        # Bağlantı ve cursor'u her durumda kapatıyoruz
+        if cur is not None:
+            cur.close()
+        if conn is not None:
+            conn.close()
 
 
-@app.route('/api/users/login', methods=['POST'])
+@bp.route('/login', methods=['POST'])
 def login_user():
     try:
-        data = request.get_json()
+        data = request.get_json() #type: dict
 
-        if not data.get('email') or not data.get('password'):
+        if not data['email'] or not data['password']:
             return create_response(
-                400,
-                False,
-                message="Email ve şifre gereklidir"
-            )
+                status_code=400,
+                success=False,
+                message="Lütfen zorunlu alanları giriniz: email and şifre.",
+                http_response="EMAIL_OR_PASSWORD_NOT_EXIST")
 
-        conn = get_db_connection()
-        cur = conn.cursor(cursor_factory=RealDictCursor)
+        user = get_user_by_email(data['email']) # Type is ordered Dict
 
-        # Kullanıcıyı bul
-        cur.execute("""
-            SELECT id, username, email, password_hash, is_active
-            FROM users
-            WHERE email = %s
-        """, (data['email'],))
-
-        user = cur.fetchone()
-        cur.close()
-        conn.close()
-
-        if not user:
-            return create_response(404, False, message="Kullanıcı bulunamadı")
-
-        if not user['is_active']:
-            return create_response(403, False, message="Hesap aktif değil")
-
-        # Şifre kontrolü
-        if not bcrypt.checkpw(data['password'].encode('utf-8'),
-                              user['password_hash'].encode('utf-8')):
-            return create_response(401, False, message="Hatalı şifre")
+        if user:
+            isActive = user.get('is_active')
+            if not isActive:
+                return create_response(
+                    status_code=403, 
+                    success=False, 
+                    message="Bu hesap aktif değil.", 
+                    http_response="FORBIDDEN_INACTIVE_ACCOUNT")
+            
+            isPassCorrect = check_password(data['password'], user.get('password_hash'))
+            if isPassCorrect:
+                # Password is correct, proceed with login
+                print("user dict: ", user)
+                user.pop('password_hash', None)
+                print("user dict after deleted pass:", user)
+                return create_response(
+                    status_code=200,
+                    success=True,
+                    data={"User":user},
+                    message="Kullanıcı girişi başarılı.",
+                    http_response="LOGIN_SUCCESSFULL")
+            if not isPassCorrect:
+                # Password is incorrect
+                return create_response(
+                    status_code=400,
+                    success=False,
+                    message="Geçersiz parola.",
+                    http_response="LOGIN_UNSUCCESSFULL")
+        else:
+            # User not found
+            return create_response(
+                    status_code=404,
+                    success=False,
+                    message="Bu email adresi ile kayıtlı bir kullanıcı bulunmamaktadır.",
+                    http_response="USER_NOT_FOUND")
 
         user.pop('password_hash')  # Şifre hash'ini response'dan çıkar
+        responseObject={'id':user[0], 'email':user[1], 'is_active':user[3]} 
         return create_response(
             200,
             True,
-            data={'user': user},
-            message="Giriş başarılı"
+            data=responseObject,
+            message="Giriş işlemi başarılı.",
+            http_response="SUCCESS_LOGIN"
         )
-
     except Exception as e:
-        return create_response(500, False, message=str(e))
+        return create_response(400, False, message="ERROR: " + str(e), http_response="BAD_REQUEST")
 
 
-@bp.route('/users/<int:user_id>', methods=['GET'])
+@bp.route('/get/user/<int:user_id>', methods=['GET'])
 def get_user(user_id):
     try:
         conn = get_db_connection()
         cur = conn.cursor(cursor_factory=RealDictCursor)
 
         # Kullanıcı bilgilerini ve istatistiklerini getir
-        cur.execute("""
-            SELECT id, username, email, created_at, is_active
+        query_getUserById = """
+            SELECT id, name, surname, birth_year, school_grade, email, is_active
             FROM users
             WHERE id = %s;
-        """, (user_id,))
-
+        """
+        cur.execute(query_getUserById, (user_id,))
         user = cur.fetchone()
-
         if not user:
-            return create_response(404, False, message="Kullanıcı bulunamadı")
-
-
-        cur.close()
-        conn.close()
+            return create_response(
+                status_code=404, 
+                success=False, 
+                message="Kullanıcı bulunamadı.",
+                http_response="USER_NOT_FOUND")
 
         return create_response(
-            200,
-            True,
-            data={'user': user}
+            status_code=200,
+            success=True,
+            data={'User': user},
+            message="Kullanıcı bilgileri başarıyla döndürüldü.",
+            http_response="SUCCESS"
         )
-
     except Exception as e:
-        return create_response(500, False, message=str(e))
+        return create_response(500, False, message=("ERROR: " + str(e)), http_response="ERROR_OCCURED")
+    finally:
+        if cur is not None:
+            cur.close()
+        if conn is not None:
+            conn.close()
 
 
-@app.route('/api/users/<int:user_id>', methods=['PUT'])
+@bp.route('/api/users/<int:user_id>', methods=['PUT'])
 def update_user(user_id):
     try:
         data = request.get_json()
@@ -241,10 +276,10 @@ def update_user(user_id):
             message="Bu email veya kullanıcı adı zaten kullanımda"
         )
     except Exception as e:
-        return create_response(500, False, message=str(e))
+        return create_response(500, False, message=("ERROR: " + str(e)), http_response="ERROR_OCCURED")
 
 
-@app.route('/api/users/<int:user_id>/stats', methods=['GET'])
+@bp.route('/api/users/<int:user_id>/stats', methods=['GET'])
 def get_user_stats(user_id):
     try:
         conn = get_db_connection()
@@ -292,8 +327,30 @@ def get_user_stats(user_id):
         )
 
     except Exception as e:
-        return create_response(500, False, message=str(e))
+        return create_response(500, False, message=("ERROR: " + str(e)), http_response="ERROR_OCCURED")
 
+def get_user_by_email(email):
+    try:
+        conn = get_db_connection()
+        cur = conn.cursor(cursor_factory=RealDictCursor)
+        query_getUserByEmail = """SELECT * 
+                                    FROM users 
+                                    WHERE email = %s"""
+        cur.execute(query_getUserByEmail, (email,))
+        user_data = cur.fetchone()
+        return user_data
+    except Exception as e:
+        message="ERROR: " + str(e)
+        return create_response(400, False, message=message, http_response="ERROR_OCCURED")
+    finally:
+        if cur is not None:
+            cur.close()
+        if conn is not None:
+            conn.close()
+
+
+def check_password(plain_password, hashed_password):
+    return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
 if __name__ == '__main__':
     app.run(debug=True)
