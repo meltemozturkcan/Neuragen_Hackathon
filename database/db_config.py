@@ -30,7 +30,8 @@ TEAM_CONFIGS = {
 }
 
 # Aktif konfigürasyonu .env dosyasından al
-ACTIVE_MEMBER = os.getenv('TEAM_MEMBER', 'member1')
+# ACTIVE_MEMBER = os.getenv('TEAM_MEMBER', 'member1')
+ACTIVE_MEMBER = "member1"
 
 # Aktif üyenin konfigürasyonunu kullan
 DB_CONFIG = TEAM_CONFIGS.get(ACTIVE_MEMBER)
