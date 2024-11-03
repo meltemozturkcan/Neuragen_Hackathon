@@ -10,7 +10,7 @@ program açıklaması
 ## Teknolojiler
 
 - Backend: Flask (Python)
-- Veritabanı: PostgreSQL
+- Veritabanı: PostgreSQL ,AWS
 - Frontend: Flutter
 - API: RESTful API
 - Ses Tanıma: Google Cloud Gemini API
