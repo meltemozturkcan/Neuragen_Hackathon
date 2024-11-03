@@ -3,43 +3,30 @@ from psycopg2 import Error
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 from db_config import DB_CONFIG
 
-
 def create_database():
-    try:
-        # Önce postgres veritabanına bağlanıyoruz
-        connection = psycopg2.connect(user="member1",
-                                  password="member1pass",
-                                  host="127.0.0.1",
-                                  port="5432",
-                                  database="neuragendev")
-        
-#        connection = psycopg2.connect(
-#            user=DB_CONFIG['user'],
-#            password=DB_CONFIG['password'],
-#            host=DB_CONFIG['host'],
-#            port=DB_CONFIG['port']
-#        )
-        
-        if(connection is None):
-            print("CONNECTION IS NONE")
+    try:        
+        connection = psycopg2.connect(DB_CONFIG.get("connectionString"))
 
-        print("CONNECTION IS OKAY")
+        if(connection is None):
+            print("#db_setup.py ## CONNECTION IS NONE")
+
+        print("#db_setup.py ## CONNECTION IS OKAY")
         connection.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
 
         cursor = connection.cursor()
 
         # Önce veritabanının var olup olmadığını kontrol edelim
-        cursor.execute("SELECT 1 FROM pg_catalog.pg_database WHERE datname = 'neuragendev'")
+        cursor.execute("SELECT 1 FROM pg_catalog.pg_database WHERE datname = 'neuragendevv'")
         exists = cursor.fetchone()
 
         if not exists:
-            cursor.execute('CREATE DATABASE neuragendev')
+            cursor.execute('CREATE DATABASE neuragendevv')
             print("Veritabanı başarıyla oluşturuldu!")
         else:
             print("Veritabanı zaten mevcut!")
 
     except (Exception, Error) as error:
-        print("Hata:", error)
+        print("#db_setup(): Hata:", error)
     finally:
         if connection:
             cursor.close()
@@ -49,13 +36,8 @@ def create_database():
 def create_tables():
     try:
         # Yeni oluşturulan veritabanına bağlanıyoruz
-        connection = psycopg2.connect(
-            dbname="neuragendev",
-            user=DB_CONFIG['user'],
-            password=DB_CONFIG['password'],
-            host=DB_CONFIG['host'],
-            port=DB_CONFIG['port']
-        )
+        connection = psycopg2.connect(DB_CONFIG.get("connectionString"))
+        print("# db_config ## get_db_connection(): Connection sağlandı")
         cursor = connection.cursor()
 
         # Kullanıcılar tablosu
@@ -102,15 +84,7 @@ def create_tables():
                 created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP)
         """)
 
-        # Test sonuçları tablosu
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS test_results (
-                id SERIAL PRIMARY KEY,
-                user_id INTEGER REFERENCES users(id),
-                letter_id INTEGER REFERENCES turkish_alphabet(id),
-                gemini_response_id INTEGER REFERENCES gemini_response(id),
-                created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP)
-        """)
+        print("gemini_response passed")
 
         # Test kelimeler tablosu
         cursor.execute("""
@@ -122,6 +96,18 @@ def create_tables():
                 created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
             )
         """)
+        print("turkish_alphabet passed")
+
+        # Test sonuçları tablosu
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS test_results (
+                id SERIAL PRIMARY KEY,
+                user_id INTEGER REFERENCES users(id),
+                letter_id INTEGER REFERENCES turkish_alphabet(id),
+                gemini_response_id INTEGER REFERENCES gemini_response(id),
+                created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP)
+        """)
+        print("test_results passed")
 
         # Kullanıcı istatistikleri tablosu
         cursor.execute("""
@@ -138,13 +124,14 @@ def create_tables():
                 REFERENCES users(id)
                 ON DELETE CASCADE)
         """)
+        print("user_stats passed")
 
         # Değişiklikleri kaydediyoruz
         connection.commit()
-        print("Tablolar başarıyla oluşturuldu!")
+        print("#db_setup.py ## Tablolar başarıyla oluşturuldu!")
 
     except (Exception, Error) as error:
-        print("Hata:", error)
+        print("ERROR: #db_setup.py()", error)
     finally:
         if connection:
             cursor.close()
@@ -154,5 +141,5 @@ def create_tables():
 if __name__ == "__main__":
     print("BEFORE CREATE DB")
     create_database()
-    print("after create db")
+    print("AFTER CREATE DB")
     create_tables()
