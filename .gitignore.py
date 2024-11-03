@@ -1,8 +1,8 @@
 # Added by Ezgi
-__pycache__\run.cpython-311.pyc
-__pycache__\config.cpython-311.pyc
-venv\
-.env\
+venv/
+.env/
+*.pyc
+__pycache__/
     
 # Byte-compiled / optimized / DLL files
 __pycache__/
