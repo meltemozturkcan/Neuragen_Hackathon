@@ -52,7 +52,7 @@ cp .env.example .env
 
 6. Uygulamayı çalıştırın:
 ```bash
-python run.py
+python app.py
 ```
 
 ## Veritabanı Şeması
