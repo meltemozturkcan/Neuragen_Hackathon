@@ -24,6 +24,13 @@ class Config:
 
     # Gemini API ayarları
     GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
+    GEMINI_MODEL = "gemini-1.5-flash"
+
+    GENERATION_CONFIG = {"temperature": 1, 
+                         "top_p": 0.95, 
+                         "top_k": 40, 
+                         "max_output_tokens": 8192, 
+                         "response_mime_type": "text/plain"}
 
     # Uygulama ayarları
     DEBUG = os.getenv('DEBUG', 'True').lower() in ('true', '1', 't')

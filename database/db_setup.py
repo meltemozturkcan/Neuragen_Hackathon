@@ -71,21 +71,45 @@ def create_tables():
                 created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
                 is_active BOOLEAN DEFAULT TRUE
-            )
-
-            
+            ) 
          """)
+        
+        print("user passed")
+        
+        #Prompt Table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS prompt (
+                id SERIAL PRIMARY KEY,
+                prompt TEXT,
+                model_name VARCHAR(50),
+                created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP)
+        """)
+        
+        print("prompt passed")
+
+        #Gemini_Response_Table
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS gemini_response (
+                id SERIAL PRIMARY KEY,
+                pronunciation_score FLOAT,
+                areas_of_improvement TEXT,
+                vowel TEXT,
+                consonant TEXT,
+                clarity TEXT,
+                confidence_score FLOAT,
+                prompt TEXT,
+                model_name TEXT,
+                created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP)
+        """)
 
         # Test sonuçları tablosu
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS test_results (
                 id SERIAL PRIMARY KEY,
                 user_id INTEGER REFERENCES users(id),
-                word_tested VARCHAR(100) NOT NULL,
-                pronunciation_score FLOAT NOT NULL,
-                audio_path VARCHAR(255),
-                created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-            )
+                letter_id INTEGER REFERENCES turkish_alphabet(id),
+                gemini_response_id INTEGER REFERENCES gemini_response(id),
+                created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP)
         """)
 
         # Test kelimeler tablosu
@@ -105,10 +129,14 @@ def create_tables():
                 id SERIAL PRIMARY KEY,
                 user_id INTEGER REFERENCES users(id),
                 total_tests INTEGER DEFAULT 0,
-                average_score FLOAT DEFAULT 0.0,
+                average_pronunciation_score FLOAT DEFAULT 0.0,
+                avg_clarity FLOAT DEFAULT 0.0,
                 last_test_date TIMESTAMP WITH TIME ZONE,
-                created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-            )
+                created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+                CONSTRAINT fk_user_stats
+                FOREIGN KEY (user_id)
+                REFERENCES users(id)
+                ON DELETE CASCADE)
         """)
 
         # Değişiklikleri kaydediyoruz
