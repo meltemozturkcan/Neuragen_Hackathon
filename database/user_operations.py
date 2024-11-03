@@ -4,19 +4,12 @@ from psycopg2.extras import RealDictCursor
 import bcrypt
 from datetime import datetime
 from .db_config import get_db_connection
+from .db_config import DB_CONFIG
 
 
 bp = Blueprint('users', __name__, url_prefix='/api')
 app = Flask(__name__)
 
-# Database bağlantı bilgileri
-DB_CONFIG = {
-    'dbname': 'neuragendev',
-    'user': 'member1',
-    'password': 'member1pass',
-    'host': 'localhost',
-    'port': '5432'
-}
 def getConn():
     conn = get_db_connection()
     return conn
