@@ -5,7 +5,7 @@ program açıklaması
 
 - Üye 1: [Ezgi Cinan]([github_linki](https://github.com/ezgicinan))
 - Üye 2: [Meltem Öztürkcan]([github_linki](https://github.com/meltemozturkcan))
-- Üye 3: [Aylin Baykan](github_linki)
+- Üye 3: [Aylin Baykan]([github_linki](https://github.com/Aylinbaykan/neuragen_hackathon))
 - 
 ## Teknolojiler
 
@@ -53,6 +53,7 @@ cp .env.example .env
 6. Uygulamayı çalıştırın:
 ```bash
 python app.py
+
 ```
 
 ## Veritabanı Şeması
@@ -62,7 +63,7 @@ python app.py
 - test_words: Test kelimeleri
 - user_stats: Kullanıcı istatistikleri
 
-
+![Aina Uygulaması : Sequence Diagram ](https://drive.google.com/file/d/1oL6tqO-6lbVSKqBN6TjNNI3ClmsUcDBa/view?usp=drive_link)
 
 ## Katkıda Bulunma
 
