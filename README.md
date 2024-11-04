@@ -1,79 +1,68 @@
 # Neuragen_Hackathon
-program açıklaması
 
-## Takım Üyeleri
+**Aina : Konuşma Gelişimi İçin Yapay Zekâ Destekli Eğitim Asistanı**
 
-- Üye 1: [Ezgi Cinan]([github_linki](https://github.com/ezgicinan))
-- Üye 2: [Meltem Öztürkcan]([github_linki](https://github.com/meltemozturkcan))
-- Üye 3: [Aylin Baykan]([github_linki](https://github.com/Aylinbaykan/neuragen_hackathon))
-- 
-## Teknolojiler
+**Genel Bakış** 
 
-- Backend: Flask (Python)
-- Veritabanı: PostgreSQL ,AWS
-- Frontend: Flutter
-- API: RESTful API
-- Ses Tanıma: Google Cloud Gemini API
+Aina, 4 - 8 yaş arası çocuklarda sesbilgisel gelişim gecikmesi ve konuşma bozukluklarının erken teşhisini kolaylaştırmak, eğitimsel içerik ve aktivitelerle konuşma becerilerini geliştirmek amacıyla tasarlanmış Türkiye'deki ilk Türkçe yapay zekâ destekli mobil uygulamadır. 
 
-## Kurulum
+Gelişmiş Gemini-1.5 Flash modeli gibi modelleri kullanarak, kullanıcıların konuşma kalıplarını değerlendirir ve geliştirme alanlarında yönlendirme sağlar. Program süresince Aina, istatistiksel analiz ile gelişimi izleyerek kullanıcıların ilerlemelerini takip etmelerine olanak tanır. 
 
-1. Repository'yi klonlayın:
-```bash
-git clone https://github.com/kullanici_adi/repo_adi.git
-cd repo_adi
-```
+Aina'nın öne çıkan özelliklerinden biri veri gizliliğine gösterdiği özen. Hiçbir ses verisi kaydedilmez ve kişisel bilgilere erişim sağlanmaz, bu da kullanıcılar için tamamen anonim bir deneyim sunar. Bu yaklaşım, gizlilikten ödün vermeden konuşma terapisi alanında en yeni yapay zeka özelliklerini sunmaktadır.
 
-2. Virtual environment oluşturun ve aktif edin:
-```bash
-python -m venv venv
-# Windows için:
-venv\Scripts\activate
-# Linux/Mac için:
-source venv/bin/activate
-```
+**Demo Linki** : Uygulama demosu için [tıklayınız](https://neuragen-hackathon.onrender.com).
+**Uygulama Tanıtım Videosu:** Uygulama tanıtım videosu için [tıklayınız](https://drive.google.com/file/d/1hiMxHpw8UDJVv2dcfuZAHQjI5kJ-B3Vi/view?usp=drive_link). 
 
-3. Gerekli paketleri yükleyin:
-```bash
-pip install -r requirements.txt
-```
-
-4. PostgreSQL veritabanını kurun:
-```bash
-# PostgreSQL'i yükleyin ve çalıştırın
-# database/db_setup.py dosyasını çalıştırın
-python database/db_setup.py
-```
-
-5. .env dosyasını oluşturun:
-```bash
-cp .env.example .env
-# .env dosyasını düzenleyin
-```
-
-6. Uygulamayı çalıştırın:
-```bash
-python app.py
-
-```![ainasequencediagram](https://github.com/user-attachments/assets/54e16ca5-73e6-41c7-aa6f-a24c15621d8e)
+## Hakkımızda 
+ [Ezgi Cinan]([github_linki](https://github.com/ezgicinan))
+ [Meltem Öztürkcan]([github_linki](https://github.com/meltemozturkcan))
+ [Aylin Baykan]([github_linki](https://github.com/Aylinbaykan/neuragen_hackathon))
+ 
+[Ford Otosan](https://www.linkedin.com/company/ford-otosan/),[Vehbi Koç Vakfı / Vehbi Koç Foundation](https://www.linkedin.com/company/vehbi-koc-vakfi/)  ve  [Mikado Sustainable Development Consulting](https://www.linkedin.com/company/mikado-sustainable-development-consulting/)  iş birliği ile hayata geçirilen  [#GelecekHayalim](https://www.linkedin.com/feed/hashtag/?keywords=gelecekhayalim&highlightedUpdateUrns=urn%3Ali%3Aactivity%3A7226210373039738881)  projesi kapsamında UP School AI Eğitimlerinde bir araya gelerek,  [BTK Akademi](https://www.linkedin.com/company/btk-akademi/) Hackathon 2024 yarışması için Aina uygulamasını geliştirmeye başlayan üç kadın yazılımcıyız. 
 
 
-## Veritabanı Şeması
+## Sistem Mimarisi
 
-- users: Kullanıcı bilgileri
-- test_results: Test sonuçları
-- test_words: Test kelimeleri
-- user_stats: Kullanıcı istatistikleri
+## Teknik Özellikler
 
-![Aina Uygulaması : Sequence Diagram ](https://drive.google.com/file/d/1oL6tqO-6lbVSKqBN6TjNNI3ClmsUcDBa/view?usp=drive_link)
+-   **Backend**: Flask (Python)
+-   **Veritabanı**: PostgreSQL, AWS RDS Cloud
+-   **Frontend**: Flutter (çapraz platform)
+-   **API**: RESTful API
+-   **Ses Tanıma**: Google Cloud Gemini API (Gemini-1.5 Flash Model)
 
-## Katkıda Bulunma
+### Backend
 
-1. Bu repository'yi fork edin
-2. Yeni bir branch oluşturun (`git checkout -b feature/yeniOzellik`)
-3. Değişikliklerinizi commit edin (`git commit -am 'Yeni özellik eklendi'`)
-4. Branch'inizi push edin (`git push origin feature/yeniOzellik`)
-5. Pull Request oluşturun
+-   **Teknoloji**: Flask (Python)
+-   **Görev**: Aina'nın backend kısmı, kullanıcı etkileşimleri ve ses işleme görevlerini yöneten ana merkez olarak hizmet verir. Gerçek zamanlı ses tanıma ve analiz sağlamak için Google Cloud Gemini API ile entegre edilmiştir.
+### Veritabanı
 
-## Lisans
+-   **Tür**: PostgreSQL
+-   **Dağıtım**: AWS RDS Cloud
+-   **Veri Yönetimi**: Veritabanı yapısı, kullanıcı oturum yönetimi ve istatistiksel takip için verimli bir yapı sunar. Aina'nın gizlilik ilkesi doğrultusunda kişisel bilgi veya ses verisi saklanmamaktadır.
 
-Bu proje [MIT](LICENSE) lisansı altında lisanslanmıştır.
+### API
+
+-   **Tür**: RESTful API
+-   **İşlev**: Frontend, backend ve üçüncü taraf hizmetler arasında iletişimi sağlar. RESTful API, ölçeklenebilirliği sağlamak için hem GET hem de POST isteklerini verimli bir şekilde işleyerek sağlam ve güvenilir veri işleme sunar.
+
+### Ses Tanıma ve Analiz
+
+-   **Servis**: Google Cloud Gemini API (Gemini-1.5 Flash Model)
+-   **Görev**: Bu API, kullanıcıların konuşmalarını gerçek zamanlı olarak tanıyarak analiz eder ve kişiselleştirilmiş terapi yolculuğunda AI destekli geri bildirim sağlar.
+
+## Eğitim Modülü
+Bu modülde, farklı seviyelere uygun eğitim içerikleri, aktiviteler ve pratik testler bulunur. Eğitim modülü, çocukların bireysel gelişim hızlarına göre uyarlanabilir ve onların konuşma becerilerini güçlendirecek adım adım bir ilerleme sağlar. Modülde ayrıca, görsel destekler ve sesli yönlendirmeler ile çocuğun aktif katılımı teşvik edilir. Dil terapistlerinin ve ebeveynlerin yönlendirmeleriyle birlikte kullanılabilecek bu modül, çocuğun dil gelişiminde kalıcı iyileşmeler elde etmesini hedefler.
+
+## Anonimlik ve Veri Gizliliği
+
+Aina, kullanıcı anonimliği odaklı bir yaklaşımla tasarlanmıştır. Hiçbir ses verisi kaydedilmez ve kullanıcıların kişisel veya tanımlayıcı bilgilerine erişim sağlanmaz. Anonim veri yapıları kullanılarak Aina, veri işleme konusundaki etik standartlarla uyumlu olarak güvenli bir platform sunmaktadır.
+
+
+
+## Konuşma Terapisi Standartlarıyla Uyumluluk
+
+Aina'nın yapay zeka destekli yaklaşımı, CAPE-V, SSI, HAPP ve GFTA gibi tanınmış konuşma terapisi değerlendirmeleriyle uyumludur. Bu uyumluluk, konuşma terapistlerine konuşma problemlerinin türü ve şiddeti hakkında standartlaştırılmış ve güvenilir analizler sunarak tanısal içgörüler ve kişiselleştirilmiş geri bildirim sağlamaktadır.
+
+
+Uygulama Sequence Tasarımı : Sequence Diagramını görmek için [tıklayınız](https://drive.google.com/file/d/1oL6tqO-6lbVSKqBN6TjNNI3ClmsUcDBa/view?usp=drive_link)
