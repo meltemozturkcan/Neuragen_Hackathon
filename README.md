@@ -36,6 +36,13 @@ Aina'nın öne çıkan özelliklerinden biri veri gizliliğine gösterdiği öze
 
 -   **Teknoloji**: Flask (Python)
 -   **Görev**: Aina'nın backend kısmı, kullanıcı etkileşimleri ve ses işleme görevlerini yöneten ana merkez olarak hizmet verir. Gerçek zamanlı ses tanıma ve analiz sağlamak için Google Cloud Gemini API ile entegre edilmiştir.
+
+  ### Frontend
+
+-   **Teknoloji**: Flutter
+-   **Görev**: Frontend arayüzü, Aina'nın işlevsellikleri ile sorunsuz bir etkileşim sunarak kullanıcı dostu bir ortam sağlar. Flutter ile geliştirilen uygulama, hem iOS hem de Android platformlarında doğal olarak çalışarak geniş bir kullanıcı kitlesine ulaşır.
+**NOT** : **Uygulamamızın Flutter kodlarına erişmek için [tıklayınız](https://github.com/Aylinbaykan/neuragen_hackathon)**
+
 ### Veritabanı
 
 -   **Tür**: PostgreSQL
