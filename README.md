@@ -4,7 +4,7 @@ program açıklaması
 ## Takım Üyeleri
 
 - Üye 1: [Ezgi Cinan]([github_linki](https://github.com/ezgicinan))
-- Üye 2: [Meltem Öztürkcan](github_linki)
+- Üye 2: [Meltem Öztürkcan]([github_linki](https://github.com/meltemozturkcan))
 - Üye 3: [Aylin Baykan](github_linki)
 - 
 ## Teknolojiler
