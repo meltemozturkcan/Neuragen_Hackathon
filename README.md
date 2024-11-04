@@ -54,7 +54,8 @@ cp .env.example .env
 ```bash
 python app.py
 
-```
+```![ainasequencediagram](https://github.com/user-attachments/assets/54e16ca5-73e6-41c7-aa6f-a24c15621d8e)
+
 
 ## Veritabanı Şeması
 
