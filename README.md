@@ -14,9 +14,10 @@ Aina'nın öne çıkan özelliklerinden biri veri gizliliğine gösterdiği öze
  -   **Uygulama Tanıtım Videosu:** Uygulama tanıtım videosu için [tıklayınız](https://drive.google.com/file/d/1hiMxHpw8UDJVv2dcfuZAHQjI5kJ-B3Vi/view?usp=drive_link).
 
 ## Hakkımızda 
- [Ezgi Cinan]([github_linki](https://github.com/ezgicinan))
- [Meltem Öztürkcan]([github_linki](https://github.com/meltemozturkcan))
- [Aylin Baykan]([github_linki](https://github.com/Aylinbaykan/neuragen_hackathon))
+
+ - [**Ezgi Cinan**]([github_linki](https://github.com/ezgicinan)) 
+ -  [**MeltemÖztürkcan**]([github_linki](https://github.com/meltemozturkcan))  
+ -  [**Aylin Baykan**]([github_linki(https://github.com/Aylinbaykan/neuragen_hackathon))
  
 [Ford Otosan](https://www.linkedin.com/company/ford-otosan/),[Vehbi Koç Vakfı / Vehbi Koç Foundation](https://www.linkedin.com/company/vehbi-koc-vakfi/)  ve  [Mikado Sustainable Development Consulting](https://www.linkedin.com/company/mikado-sustainable-development-consulting/)  iş birliği ile hayata geçirilen  [#GelecekHayalim](https://www.linkedin.com/feed/hashtag/?keywords=gelecekhayalim&highlightedUpdateUrns=urn%3Ali%3Aactivity%3A7226210373039738881)  projesi kapsamında UP School AI Eğitimlerinde bir araya gelerek,  [BTK Akademi](https://www.linkedin.com/company/btk-akademi/) Hackathon 2024 yarışması için Aina uygulamasını geliştirmeye başlayan üç kadın yazılımcıyız. 
 
