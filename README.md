@@ -10,8 +10,8 @@ Gelişmiş Gemini-1.5 Flash modeli gibi modelleri kullanarak, kullanıcıların 
 
 Aina'nın öne çıkan özelliklerinden biri veri gizliliğine gösterdiği özen. Hiçbir ses verisi kaydedilmez ve kişisel bilgilere erişim sağlanmaz, bu da kullanıcılar için tamamen anonim bir deneyim sunar. Bu yaklaşım, gizlilikten ödün vermeden konuşma terapisi alanında en yeni yapay zeka özelliklerini sunmaktadır.
 
-**Demo Linki** : Uygulama demosu için [tıklayınız](https://neuragen-hackathon.onrender.com).
-**Uygulama Tanıtım Videosu:** Uygulama tanıtım videosu için [tıklayınız](https://drive.google.com/file/d/1hiMxHpw8UDJVv2dcfuZAHQjI5kJ-B3Vi/view?usp=drive_link). 
+ - **Demo Linki** : Uygulama demosu için [tıklayınız](https://neuragen-hackathon.onrender.com).
+ -   **Uygulama Tanıtım Videosu:** Uygulama tanıtım videosu için [tıklayınız](https://drive.google.com/file/d/1hiMxHpw8UDJVv2dcfuZAHQjI5kJ-B3Vi/view?usp=drive_link).
 
 ## Hakkımızda 
  [Ezgi Cinan]([github_linki](https://github.com/ezgicinan))
