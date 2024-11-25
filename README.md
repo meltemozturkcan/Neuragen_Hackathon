@@ -1,4 +1,4 @@
-# Neuragen_Hackathon
+# Neuragen
 
 **Aina : Konuşma Gelişimi İçin Yapay Zekâ Destekli Eğitim Asistanı**
 
